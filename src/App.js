@@ -4,8 +4,15 @@ import Layout from './components/Layout/Layout';
 import UserProfile from './components/Profile/UserProfile';
 import AuthPage from './components/Pages/AuthPage';
 import HomePage from './components/Pages/HomePage';
+import { useContext } from 'react';
+import AuthContext from './components/Store/auth-context';
+import { Redirect } from 'react-router-dom';
 
 function App() {
+  const authCtx = useContext(AuthContext);
+
+  const isLoggedIn = authCtx.isLoggedIn;
+
   return (
     <Layout>
       <Switch>
@@ -13,10 +20,10 @@ function App() {
           <HomePage />
         </Route>
         <Route path='/auth'>
-          <AuthPage />
+          {!isLoggedIn ? <AuthPage /> : <Redirect to='/profile' />}
         </Route>
         <Route path='/profile'>
-          <UserProfile />
+          {isLoggedIn ? <UserProfile /> : <Redirect to='/auth' />}
         </Route>
       </Switch>
     </Layout>

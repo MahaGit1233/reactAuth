@@ -10,6 +10,7 @@ const MainNavigation = () => {
 
   const logoutBtnHandler = () => {
     authCtx.logout();
+    // authCtx.token=null;
   }
 
   const isLoggedIn = authCtx.isLoggedIn;
