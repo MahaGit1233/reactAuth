@@ -9,6 +9,8 @@ const AuthForm = () => {
   const [enteredPassword, setEnteredPassword] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const url = isLogin ? 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD6Gj3hGJUWemo2iK8w7GkCTWiU41SmoFI' : 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD6Gj3hGJUWemo2iK8w7GkCTWiU41SmoFI';
+
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
@@ -26,31 +28,33 @@ const AuthForm = () => {
 
     setIsLoading(true);
 
-    if (!isLogin) {
-      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD6Gj3hGJUWemo2iK8w7GkCTWiU41SmoFI', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: enteredEmail,
-          password: enteredPassword,
-          returnSecureToken: true,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      }).then(res => {
-        if (res.ok) {
-          console.log("OK");
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).then(res => {
+      if (res.ok) {
+        setIsLoading(false);
+        return res.json();
+      }
+      else {
+        return res.json().then((data) => {
+          alert(data.error.message);
+          console.log(data.error.message);
           setIsLoading(false);
-        }
-        else {
-          return res.json().then((data) => {
-            alert(data.error.message);
-            console.log(data.error.message);
-            setIsLoading(false);
-          })
-        }
-      })
-    }
+        })
+      }
+    }).then((data)=>{
+      console.log(data.idToken);      
+    }).catch((err)=>{
+      alert(err.message);
+    })
 
     setEnteredEmail("");
     setEnteredPassword("");
