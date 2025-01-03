@@ -1,13 +1,16 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 
 import classes from './AuthForm.module.css';
 import { Prompt } from 'react-router-dom';
+import AuthContext from '../Store/auth-context';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [enteredEmail, setEnteredEmail] = useState([]);
   const [enteredPassword, setEnteredPassword] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const authCtx = useContext(AuthContext);
 
   const url = isLogin ? 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD6Gj3hGJUWemo2iK8w7GkCTWiU41SmoFI' : 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD6Gj3hGJUWemo2iK8w7GkCTWiU41SmoFI';
 
@@ -40,6 +43,7 @@ const AuthForm = () => {
       },
     }).then(res => {
       if (res.ok) {
+        console.log("ok");
         setIsLoading(false);
         return res.json();
       }
@@ -50,9 +54,10 @@ const AuthForm = () => {
           setIsLoading(false);
         })
       }
-    }).then((data)=>{
-      console.log(data.idToken);      
-    }).catch((err)=>{
+    }).then((data) => {
+      console.log(data.idToken);
+      authCtx.login(data.idToken);
+    }).catch((err) => {
       alert(err.message);
     })
 
