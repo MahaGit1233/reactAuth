@@ -25,6 +25,9 @@ function App() {
         <Route path='/profile'>
           {isLoggedIn ? <UserProfile /> : <Redirect to='/auth' />}
         </Route>
+        <Route path='*'>
+          <Redirect to='/' />
+        </Route>
       </Switch>
     </Layout>
   );
