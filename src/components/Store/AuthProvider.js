@@ -2,15 +2,18 @@ import React, { useState } from "react";
 import AuthContext from "./auth-context";
 
 const AuthProvider = (props) => {
-    const initialToken=localStorage.getItem('token');
+    const initialToken = localStorage.getItem('token');
 
     const [token, setToken] = useState(initialToken);
 
     const userLogin = !!token;
 
-    const loginHandler = (newToken) => {
+    const dummyExpireTime = 5 * 60 * 1000;
+
+    const loginHandler = (newToken,expireTime) => {
         setToken(newToken);
-        localStorage.setItem('token',newToken);
+        localStorage.setItem('token', newToken);
+        setTimeout(logoutHandler,dummyExpireTime);
     };
 
     const logoutHandler = () => {

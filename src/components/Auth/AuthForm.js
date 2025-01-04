@@ -54,8 +54,9 @@ const AuthForm = () => {
         })
       }
     }).then((data) => {
-      console.log(data.idToken);
-      authCtx.login(data.idToken);
+      console.log(data);
+      const expiresIn = data.expiresIn * 1000;
+      authCtx.login(data.idToken, expiresIn);
     }).catch((err) => {
       alert(err.message);
     })
