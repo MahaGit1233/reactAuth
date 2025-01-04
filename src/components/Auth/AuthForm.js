@@ -1,7 +1,6 @@
 import { useState, useRef, useContext } from 'react';
 
 import classes from './AuthForm.module.css';
-import { Prompt } from 'react-router-dom';
 import AuthContext from '../Store/auth-context';
 
 const AuthForm = () => {
